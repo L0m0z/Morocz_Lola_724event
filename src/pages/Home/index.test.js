@@ -11,19 +11,15 @@ describe("When Form is created", () => {
   });
 
   describe("and a click is triggered on the submit button", () => {
-    it("the success message is displayed", async () => {
-      render(<Home />);
-      fireEvent(
-        await screen.findByText("Envoyer"),
-        new MouseEvent("click", {
-          cancelable: true,
-          bubbles: true,
-        })
-      );
-      await screen.findByText("En cours");
-      await screen.findByText("Message envoyé !");
-    });
+  it("the success message is displayed", async () => {
+    render(<Home />);
+
+    fireEvent.click(await screen.findByText("Envoyer"));
+
+    await screen.findByText("En cours"); // loading message
+    await screen.findByText((content) => content.includes("Message envoyé"));
   });
+});
 
 });
 

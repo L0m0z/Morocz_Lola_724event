@@ -1,25 +1,19 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useState } from "react";
 import PropTypes from "prop-types";
 
 import "./style.scss";
 
-const Select = ({
-  selection,
-  onChange,
-  name,
-  titleEmpty,
-  label,
-  type = "normal",
-}) => {
+const Select = ({selection, onChange, name, titleEmpty, label, type = "normal",}) => {
   const [value, setValue] = useState();
   const [collapsed, setCollapsed] = useState(true);
-
   const changeValue = (newValue) => {
+    // Ajout de newValue dans le onChange()
+    onChange(newValue); 
     setValue(newValue);
-    setCollapsed(true); // referme le menu déroulant
-    onChange(newValue); // transmet la sélection au parent (EventList)
+    setCollapsed(newValue);
   };
-
   return (
     <div className={`SelectContainer ${type}`} data-testid="select-testid">
       {label && <div className="label">{label}</div>}
@@ -31,22 +25,19 @@ const Select = ({
           {!collapsed && (
             <>
               {!titleEmpty && (
-                <li>
-                  <button type="button" onClick={() => changeValue(null)}>
-                    <input defaultChecked={!value} name="selected" type="radio" /> Toutes
-                  </button>
+                <li onClick={() => changeValue(null)}>
+                  <input defaultChecked={!value} name="selected" type="radio" />{" "}
+                  Toutes
                 </li>
               )}
               {selection.map((s) => (
-                <li key={s}>
-                  <button type="button" onClick={() => changeValue(s)}>
-                    <input
-                      defaultChecked={value === s}
-                      name="selected"
-                      type="radio"
-                    />{" "}
-                    {s}
-                  </button>
+                <li key={s} onClick={() => changeValue(s)}>
+                  <input
+                    defaultChecked={value === s}
+                    name="selected"
+                    type="radio"
+                  />{" "}
+                  {s}
                 </li>
               ))}
             </>
@@ -91,7 +82,7 @@ Select.propTypes = {
   titleEmpty: PropTypes.bool,
   label: PropTypes.string,
   type: PropTypes.string,
-};
+}
 
 Select.defaultProps = {
   onChange: () => null,
@@ -99,6 +90,6 @@ Select.defaultProps = {
   label: "",
   type: "normal",
   name: "select",
-};
+}
 
 export default Select;
